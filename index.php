@@ -28,16 +28,7 @@ switch ($uc) {
     case 'cumulefrais' :{
         include("controllers/c_cumulefrais.php");break;
     }
-    case 'cumulefraismois' :{
-        include("controllers/c_cumulefrais.php");break;
-    }
     case 'fraisVisiteur' :{
-        include("controllers/c_cumulefrais.php");break;
-    }
-    case 'cumulefraisvisiteurs' :{
-        include("controllers/c_cumulefrais.php");break;
-    }
-    case 'saisiefrais' :{
         include("controllers/c_cumulefrais.php");break;
     }
 }
