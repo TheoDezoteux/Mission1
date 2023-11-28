@@ -52,28 +52,13 @@ class PdoGsb{
      * @param $mdp
      * @return mixed L'id, le nom et le prénom sous la forme d'un tableau associatif
      */
-    public function getInfosVisiteur($login, $mdp){
-        $req = "select id, nom, prenom from visiteur where login='$login' and mdp='$mdp'";
+    public function getInfosVisiteur($login, $mdp, $typeCPT){
+        $req = "select id, nom, prenom, TypeCPT from visiteur where login='$login' and mdp='$mdp' and TypeCPT='$typeCPT'";
         $rs = PdoGsb::$monPdo->query($req);
         $ligne = $rs->fetch();
         return $ligne;
     }
-
-    public function getInfosComptable(){
-        $req = "SELECT * FROM visiteur WHERE estcomptable = 1";
-        $res = PdoGsb::$monPdo->query($req);
-        $lesComptables = $res->fetchAll();
-        return $lesComptables;
-}
-
-
-public function updateEstComptable($idVisiteur, $estComptable){
-    $req = "UPDATE visiteur SET estcomptable = :estComptable WHERE id = :idVisiteur";
-    $stmt = PdoGsb::$monPdo->prepare($req);
-    $stmt->bindParam(':estComptable', $estComptable, PDO::PARAM_INT);
-    $stmt->bindParam(':idVisiteur', $idVisiteur, PDO::PARAM_INT);
-    $stmt->execute();
-}
+    
 
     /**
      * Transforme une date au format français jj/mm/aaaa vers le format anglais aaaa-mm-jj
@@ -168,8 +153,8 @@ public function updateEstComptable($idVisiteur, $estComptable){
         $req = "SELECT li.mois,v.nom, v.prenom, li.quantite * ff.montant as somme 
         from visiteur v INNER JOIN fichefrais fi on fi.idVisiteur = v.id 
         INNER JOIN lignefraisforfait li on li.idVisiteur = v.id and li.mois = fi.mois 
-        INNER JOIN fraisforfait ff on ff.id = li.idFraisForfait 
-        WHERE v.id = '$idVisiteur' and ff.id='$idFraisForfait';";
+        INNER JOIN fraisforfait ff on ff.id = li.idFraisForfait  
+        WHERE v.id = '$idVisiteur'  and ff.id='$idFraisForfait';";
         $res = PdoGsb::$monPdo->query($req);
         $laLigne = $res->fetchAll();
 
@@ -189,42 +174,38 @@ public function updateEstComptable($idVisiteur, $estComptable){
         $laLigne = $res->fetchAll();
         return $laLigne;
     }
-
-    public function getCumuleTout($idVisiteur,$mois,$idFraisForfait){
-        $req = "SELECT li.idVisiteur,li.idFraisForfait,li.mois,v.nom,v.prenom, li.quantite*ff.montant as somme
-        FROM visiteur v
-        INNER JOIN fichefrais fi on fi.idVisiteur = v.id
-        INNER JOIN lignefraisforfait li on li.idVisiteur = v.id and li.mois = fi.mois
-        INNER JOIN fraisforfait ff on ff.id = li.idfraisforfait
+    public function getCumuletous($idVisiteur,$mois,$idFraisForfait){
+        $req = "SELECT li.idVisiteur,li.idFraisForfait,li.mois,v.nom, v.prenom, li.quantite * ff.montant as somme 
+        from visiteur v 
+        INNER JOIN fichefrais fi on fi.idVisiteur = v.id 
+        INNER JOIN lignefraisforfait li on li.idVisiteur = v.id and li.mois = fi.mois 
+        INNER JOIN fraisforfait ff on ff.id = li.idFraisForfait 
         WHERE v.id = '$idVisiteur' and fi.mois = '$mois' and ff.id='$idFraisForfait'";
         $res = PdoGsb::$monPdo->query($req);
         $laLigne = $res->fetchAll();
         return $laLigne;
     }
-
-    public function getCumuleVisiteur($idVisiteur,$idFraisForfait){
-        $req = "SELECT SUM(quantite) * fraisforfait.montant as somme FROM lignefraisforfait 
-        INNER JOIN fraisforfait on idFraisForfait = id 
-        where idVisiteur = '$idVisiteur' and fraisforfait.id = '$idFraisForfait'";
+    public function getCumulevisiteur($idVisiteur,$idFraisForfait){
+        $req ="SELECT SUM(quantite) * fraisforfait.montant as somme from lignefraisforfait inner join fraisforfait on idFraisForfait = id where  idVisiteur = '$idVisiteur' and idFraisForfait='$idFraisForfait' group by idFraisForfait ";
         $res = PdoGsb::$monPdo->query($req);
         $laLigne = $res->fetchAll();
         return $laLigne;
     }
+    public function get1e($leVisiteur,$mo,$tarif,$qt){
 
-    public function saisirFrais($visitor,$mois,$idFraisForfait,$quantite){
-        $req ="INSERT INTO lignefraisforfait('idVisiteur', 'mois', 'idFraisForfait', 'quantite') VALUES ('$visitor', $mois, '$idFraisForfait', $quantite)";
+        $req ="INSERT INTO lignefraisforfait (`idVisiteur`, `mois`, `idFraisForfait`, `quantite`) VALUES ('$leVisiteur',$mo,'$tarif',$qt) ";
         $res = PdoGsb::$monPdo->query($req);
         $laLigne = $res->fetchAll();
         return $laLigne;
     }
-        
-    public function getSaisirFrais($visitor,$mois){
-        $req ="INSERT INTO `fichefrais`(`idVisiteur`, `mois`) VALUES ('$visitor','$mois')";
-        $res = PdoGsb::$monPdo->query($req);
-        $laLigne = $res->fetchAll();
-        return $laLigne;
+    public function get1ee($leVisiteur,$mo){
 
-    }
+         $req ="INSERT INTO `fichefrais`(`idVisiteur`, `mois`) VALUES ('$leVisiteur','$mo') ";
+         $res = PdoGsb::$monPdo->query($req);
+         $laLigne = $res->fetchAll();
+         return $laLigne;
+     }
+
 
 
 
