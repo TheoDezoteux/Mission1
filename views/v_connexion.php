@@ -5,15 +5,24 @@
 
 
         <p>
-            <label for="nom">Login*</label>
+            <label for="nom">Login</label>
             <input id="login" type="text" name="login" size="30" >
         </p>
+
         <p>
-            <label for="mdp">Mot de passe*</label>
+            <label for="mdp">Mot de passe</label>
             <input id="mdp" type="password" name="mdp" size="30">
         </p>
+
+        <p>
+            <select for="TypeCPT">
+                <option value="VIS" id="TypeCPT" name="VIS">Visiteur</option>
+                <option value="CPT" id="TypeCPT" name="CPT">Comptable</option>
+            </select>
+        </p>
+
         <input type="submit" value="Valider" name="valider">
         <input type="reset" value="Annuler" name="annuler">
-
+        
     </form>
 

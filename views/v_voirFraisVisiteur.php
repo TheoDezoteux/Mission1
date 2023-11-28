@@ -1,5 +1,4 @@
-
-<h3 class="align-center">Fiche du cumule des frais du visiteur : </h3>
+<h3 class="align-center">Fiche du cumule des frais du mois : </h3>
     <div class="encadre">
   	<table class="listeLegere">
              <tr>

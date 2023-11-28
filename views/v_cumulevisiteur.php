@@ -1,9 +1,9 @@
 <div id="contenu">
-      <form action="index.php?uc=fraisVisiteur&action=voirFraisVisiteur" method="post">
+      <form action="index.php?uc=cumulefrais&action=voirCumulevisiteur" method="post">
       <div class="corpsForm">
-      <h2>Visiteur</h2>
+      <h2>Periode</h2>
       <p>
-        <label for="num" accesskey="n">Numéro: </label>
+      <label for="num" accesskey="n">Numéro: </label>
         <select id="num" name="numero">
             <?php
 			foreach ($visiteurs as $unVisiteur)
@@ -16,16 +16,7 @@
 		   ?>    
         </select>
 
-        <label for="tfrais" accesskey="n">Type de frais: </label>
-        <select id="tfrais" name="tfrais">
-            <?php
-			foreach ($typeFrais as $unfrai)
-			{?>
-				<option value="<?php echo $unfrai['id'] ?>"><?= $unfrai['id'] ?></option>
-      <?php
-			}
-		  ?>    
-        </select>
+       
       </p>
       </div>
       <div class="piedForm">
@@ -36,4 +27,4 @@
       </div>
         
       </form>
-  
+ 
